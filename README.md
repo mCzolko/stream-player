@@ -11,3 +11,4 @@ Thanks to [marbemac](https://github.com/marbemac) for submitting a pull request 
 
 Thanks to [vicentedealencar](https://github.com/vicentedealencar) for an example of using [electron-builder](https://github.com/electron-userland/electron-builder) for packaging. Details are [here](https://github.com/vicentedealencar/electron-with-create-react-app/commit/f1729381d588e65ac140ce5a08cc6277babd9641).
 
+# stream-player

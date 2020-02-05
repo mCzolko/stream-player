@@ -1,21 +1,51 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback } from 'react'
+import './App.css'
+import useWindowSize from './hooks/windowSize'
+import useEventListener from './hooks/eventListener'
+import Youtube from './players/youtube'
+// import TwitchEmbedVideo from './players/twitch'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React/Electron</h2>
-        </div>
-        <p className="App-intro">
-          Hello Electron!
-        </p>
-      </div>
-    );
+export default () => {
+  const [ videoUrl, setVideoUrl ] = useState('')
+  const pasteHandler = useCallback(
+    event => {
+      setVideoUrl((event.clipboardData || window.clipboardData).getData('text'))
+    },
+    [setVideoUrl],
+  )
+  useEventListener('paste', pasteHandler)
+  const { width, height } = useWindowSize()
+  let video
+
+  // const video = <Youtube id="H3WZAw9ctmw" />
+  // const video = <TwitchEmbedVideo video="207270826" />
+
+  if (videoUrl) {
+    try {
+      const url = new URL(videoUrl)
+    
+      switch (url.hostname) {
+        case "www.youtube.com":
+          video = <Youtube id="H3WZAw9ctmw" />
+          break
+      }
+
+    } catch (error) {
+      setVideoUrl(null)
+    }
   }
-}
 
-export default App;
+  return (
+    <div style={{ width, height }}>
+      {video}
+      
+      {!video && (
+        <div>
+          Paste video url (YouTube, Twitch)
+          <br /><br />
+          Pasted: {videoUrl}
+        </div>
+      )}
+    </div>
+  )
+}
